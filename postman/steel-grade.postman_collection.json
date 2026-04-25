@@ -1,0 +1,42 @@
+{
+  "info": {
+    "name": "Steel Grade API",
+    "description": "API collection for Steel Grade service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Steel Grades",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:8080/webksz/steel-grades"
+      }
+    },
+    {
+      "name": "Create Steel Grade",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"S235\",\n  \"strength\": \"low carbon structural steel\"\n}"
+        },
+        "url": "http://localhost:8080/webksz/steel-grades"
+      }
+    },
+    {
+      "name": "Delete Steel Grade",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "http://localhost:8080/webksz/steel-grades/1"
+      }
+    }
+  ]
+}

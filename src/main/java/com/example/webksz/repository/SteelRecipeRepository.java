@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface SteelRecipeRepository extends JpaRepository<SteelRecipe, Long> {
     List<SteelRecipe> findBySteelGradeIdAndIsDeletedFalse(Long steelGradeId);
+    boolean existsBySteelGradeIdAndIsDeletedFalse(Long steelGradeId);
+    long countBySteelGradeIdAndIsDeletedFalse(Long steelGradeId);
 }
