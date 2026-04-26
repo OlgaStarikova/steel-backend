@@ -2,10 +2,11 @@ package com.example.webksz.service;
 
 import com.example.webksz.dto.SaveSteelRecipesRequestDto.RecipeItemDto;
 import com.example.webksz.dto.SteelRecipeDto;
-import com.example.webksz.mapper.SteelRecipeMapper;
+import com.example.webksz.model.BalansCoef;
 import com.example.webksz.model.SteelGrade;
 import com.example.webksz.model.SteelRecipe;
 import com.example.webksz.model.TmcCatalog;
+import com.example.webksz.repository.BalansCoefRepository;
 import com.example.webksz.repository.SteelGradeRepository;
 import com.example.webksz.repository.SteelRecipeRepository;
 import com.example.webksz.repository.TmcCatalogRepository;
@@ -26,7 +27,7 @@ public class SteelRecipeService {
     private final SteelRecipeRepository steelRecipeRepository;
     private final SteelGradeRepository steelGradeRepository;
     private final TmcCatalogRepository tmcCatalogRepository;
-    private final SteelRecipeMapper steelRecipeMapper;
+    private final BalansCoefRepository balansCoefRepository;
 
     public List<SteelRecipeDto> findBySteelGradeId(Long steelGradeId) {
         return steelRecipeRepository.findBySteelGradeIdAndIsDeletedFalse(steelGradeId)
@@ -36,8 +37,31 @@ public class SteelRecipeService {
                     if (cmp != 0) return cmp;
                     return a.getSortOrder().compareTo(b.getSortOrder());
                 })
-                .map(steelRecipeMapper::toDto)
+                .map(this::toDto)
                 .toList();
+    }
+
+    private SteelRecipeDto toDto(SteelRecipe recipe) {
+        Long tmcCatalogId = recipe.getTmcCatalog() != null ? recipe.getTmcCatalog().getId() : null;
+        String tmcName = recipe.getTmcCatalog() != null ? recipe.getTmcCatalog().getName() : null;
+
+        if (tmcCatalogId == null && recipe.getCoefficient() != null) {
+            BalansCoef balansCoef = balansCoefRepository.findByCode(recipe.getCoefficient());
+            if (balansCoef != null) {
+                tmcName = balansCoef.getName();
+            }
+        }
+
+        return new SteelRecipeDto(
+                recipe.getId(),
+                recipe.getSectionId(),
+                recipe.getSortOrder(),
+                tmcCatalogId,
+                tmcName,
+                recipe.getPercentage(),
+                recipe.getNote(),
+                recipe.getCoefficient()
+        );
     }
 
     @Transactional

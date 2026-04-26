@@ -1,0 +1,41 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 2026-04-26-002-recipe-allowed-coef
+      author: Olga-Starykova
+      changes:
+
+        - createTable:
+            tableName: recipe_allowed_coef
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: coef_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: recipe_allowed_coef
+            baseColumnNames: coef_id
+            referencedTableName: balans_coef
+            referencedColumnNames: id
+            constraintName: fk_recipe_allowed_coef_balans
+
+        - addUniqueConstraint:
+            tableName: recipe_allowed_coef
+            columnNames: coef_id
+            constraintName: uq_recipe_allowed_coef_coef_id
+
+        - sql:
+            sql: >
+              INSERT INTO recipe_allowed_coef (coef_id)
+              SELECT id FROM balans_coef
+              WHERE code IN ('Shlak','Sliv','Tehskrap','Ugar','Vozvtref');

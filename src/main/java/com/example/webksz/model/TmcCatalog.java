@@ -30,6 +30,9 @@ public class TmcCatalog {
     @Column(name = "marka", length = 255)
     private String marka;
 
+    @Column(name = "nameklass", length = 255)
+    private String nameklass;
+
     @Column(name = "gost", length = 255)
     private String gost;
 
